@@ -44,9 +44,13 @@ object Monad {
     override def map[A, B](fa: Try[A])(f: A => B): Try[B] = fa.map(f)
   }
 
-  implicit class MonadOps[F[_], A](fa: F[A])(implicit ev: Monad[F]) {
+  implicit class FlatMapOps[F[_], A](fa: F[A])(implicit ev: Monad[F]) {
     def flatMap_[B](f: A => F[B]): F[B] = ev.flatMap(fa)(f)
 
+  }
+
+  implicit class FlattenOps[F[_], A](fa: F[F[A]])(implicit ev: Monad[F]) {
+    def flatten_ : F[A] = ev.flatten(fa)
   }
 
 }
